@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Reactive.Concurrency;
 using System.Reactive.Linq;
@@ -7,17 +8,14 @@ using System.Threading;
 using System.Threading.Tasks;
 
 using Microsoft.Build.Evaluation;
-using Microsoft.Build.Execution;
 
 using NugetUnicorn.Business.Extensions;
 using NugetUnicorn.Business.FuzzyMatcher.Engine;
-using NugetUnicorn.Business.FuzzyMatcher.Matchers;
 using NugetUnicorn.Business.FuzzyMatcher.Matchers.Analyzer;
 using NugetUnicorn.Business.FuzzyMatcher.Matchers.ReferenceMatcher;
 using NugetUnicorn.Business.FuzzyMatcher.Matchers.ReferenceMatcher.Metadata;
 using NugetUnicorn.Business.FuzzyMatcher.Matchers.ReferenceMatcher.ReferenceType;
 using NugetUnicorn.Business.FuzzyMatcher.Matchers.SolutionFileParsers;
-using NugetUnicorn.Business.Microsoft.Build;
 using NugetUnicorn.Business.SourcesParser.ProjectParser;
 using NugetUnicorn.Business.SourcesParser.ProjectParser.Structure;
 
@@ -34,7 +32,7 @@ namespace NugetUnicorn.Business.SourcesParser
         public SolutionReferenseAnalyzer(IScheduler scheduler, string solutionPath)
         {
             _scheduler = scheduler;
-            _solutionPath = solutionPath;
+            _solutionPath = Path.GetFullPath(solutionPath);
         }
 
         public IObservable<Message.Info> Run()
